@@ -1,0 +1,141 @@
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 6
+Server version: 5.5.5-10.1.31-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database pet;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| latihan001         |
+| mysql              |
+| performance_schema |
+| perusahaan         |
+| pet                |
+| phpmyadmin         |
+| sewamobil          |
++--------------------+
+8 rows in set (0.00 sec)
+
+mysql> use pet;
+Database changed
+
+mysql> create table hewan
+    -> (nama varchar (20) primary key,
+    -> owner varchar (20) not null,
+    -> species varchar (20) not null,
+    -> sex varchar (20) not null,
+    -> birth varchar (15) not null,
+    -> death varchar (15) not null);
+Query OK, 0 rows affected (0.53 sec)
+
+mysql> desc hewan;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| nama    | varchar(20) | NO   | PRI | NULL    |       |
+| owner   | varchar(20) | NO   |     | NULL    |       |
+| species | varchar(20) | NO   |     | NULL    |       |
+| sex     | varchar(20) | NO   |     | NULL    |       |
+| birth   | varchar(15) | NO   |     | NULL    |       |
+| death   | varchar(15) | NO   |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+6 rows in set (0.14 sec)
+
+mysql> insert into hewan values
+    -> ("Puffball","Diane","Hamster","f","1999-03-03","NULL"),
+    -> ("Claws","Gwen","Cat","f","1994-03-17","NULL"),
+    -> ("Fulffy","Harold","Cat","m","1993-02-04","NULL"),
+    -> ("Buffy","Harold","Dog","f","1989-05-13","NULL"),
+    -> ("Fang","Benny","Dog","m","1990-08-27","NULL");
+Query OK, 5 rows affected (0.11 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from hewan;
++----------+--------+---------+-----+------------+-------+
+| nama     | owner  | species | sex | birth      | death |
++----------+--------+---------+-----+------------+-------+
+| Buffy    | Harold | Dog     | f   | 1989-05-13 | NULL  |
+| Claws    | Gwen   | Cat     | f   | 1994-03-17 | NULL  |
+| Fang     | Benny  | Dog     | m   | 1990-08-27 | NULL  |
+| Fulffy   | Harold | Cat     | m   | 1993-02-04 | NULL  |
+| Puffball | Diane  | Hamster | f   | 1999-03-03 | NULL  |
++----------+--------+---------+-----+------------+-------+
+5 rows in set (0.00 sec)
+
++--------+--------+
+| Owner  | jumlah |
++--------+--------+
+| Benny  |      1 |
+| Diane  |      1 |
+| Gwen   |      1 |
+| Harold |      2 |
++--------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select species ,count(owner) as jumlah from hewan group by species;
++---------+--------+
+| species | jumlah |
++---------+--------+
+| Cat     |      2 |
+| Dog     |      2 |
+| Hamster |      1 |
++---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select sex, count(species) as jumlah from hewan group by sex;
++-----+--------+
+| sex | jumlah |
++-----+--------+
+| f   |      3 |
+| m   |      2 |
++-----+--------+
+2 rows in set (0.00 sec)
+
+mysql> select species ,sex,count(owner) as jumlah from hewan group by species;
++---------+-----+--------+
+| species | sex | jumlah |
++---------+-----+--------+
+| Cat     | f   |      2 |
+| Dog     | f   |      2 |
+| Hamster | f   |      1 |
++---------+-----+--------+
+3 rows in set (0.00 sec)
+
+mysql> select species ,sex, count(owner) as jumlah from hewan
+    -> where species <> "Hamster"
+    -> and species <> "Bird"
+    -> and species <> "Snake"
+    -> group by species ,sex;
++---------+-----+--------+
+| species | sex | jumlah |
++---------+-----+--------+
+| Cat     | f   |      1 |
+| Cat     | m   |      1 |
+| Dog     | f   |      1 |
+| Dog     | m   |      1 |
++---------+-----+--------+
+4 rows in set (0.07 sec)
+
+mysql> select sex,count(species) as jumlah from hewan
+    -> where sex <> "NULL"
+    -> group by sex;
++-----+--------+
+| sex | jumlah |
++-----+--------+
+| f   |      3 |
+| m   |      2 |
++-----+--------+
+2 rows in set (0.00 sec)
